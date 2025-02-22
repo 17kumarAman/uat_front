@@ -109,6 +109,7 @@ import ScrollTop from "./Components/utils/ScrollTop.jsx";
 import DeactivateEmployee from "./Components/admin/EmployManagement/DeactivateEmployee.jsx";
 import MyLeaves from "./Components/admin/EmployeeHRM/MyLeaves.js";
 import EmployeeAnnouncement from "./Components/admin/EmployeeHRM/EmployeeAnnouncement.jsx";
+import NotFoundPage from "./Components/Error.jsx";
 
 var tc;
 
@@ -173,6 +174,7 @@ function App() {
             <Route path="/forget" element={<ForgetPassword setAlert={setAlert} />} />
             <Route path="/forget1" element={<ForgetPassword1 setAlert={setAlert} />} />
             <Route path="/forget2" element={<ForgetPassword2 setAlert={setAlert} />} />
+            <Route path="*" element={<NotFoundPage />} />
 
             {/* =================Employee routing=========== */}
             <Route

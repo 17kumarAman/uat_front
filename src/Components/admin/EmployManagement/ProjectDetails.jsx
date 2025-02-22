@@ -18,14 +18,16 @@ import CircularProgress from "./CircularProgress";
 import { MdDelete } from "react-icons/md";
 import { MdOutlineEdit } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const ProjectDetails = ({ setAlert, pop, setPop }) => {
+  const navigate = useNavigate();
   const {
     user,
     getAllProjectApi,
     CreateProjectTask,
     getProjectTask,
-    deleteProjectTaskapi,
+    deleteProjectTaskapi22,
     EditProjectTask,
   } = useMain();
 
@@ -43,7 +45,7 @@ const ProjectDetails = ({ setAlert, pop, setPop }) => {
   const [formdata, setFormdata] = useState({
     Title: "",
     Description: "",
-    Members: "",
+    Members: [],
     StartDate: "",
     DueDate: "",
     Priority: "",
@@ -89,10 +91,11 @@ const ProjectDetails = ({ setAlert, pop, setPop }) => {
       }
       setAddClientPop(false);
       getProjectTaskapi();
+      // setProUser([]);
       setFormdata({
         Title: "",
         Description: "",
-        Members: "",
+        Members: [],
         StartDate: "",
         DueDate: "",
         Github: "",
@@ -101,6 +104,24 @@ const ProjectDetails = ({ setAlert, pop, setPop }) => {
     } catch (error) {
       toast.error("Something went wrong, please try again");
     }
+  };
+  const [proUser, setProUser] = useState([]);
+
+
+  const changeHandler2 = (e) => {
+    const selectedEmpId = e.target.value;
+    if (selectedEmpId === 'Select' || formdata.Members.includes(selectedEmpId)) return;
+
+    const selectedEmp = allEmp.find((emp) => emp._id === selectedEmpId);
+    setProUser([...proUser, selectedEmp.fullName]);
+    setFormdata({ ...formdata, Members: [...formdata.Members, selectedEmpId] });
+  };
+
+  const removeUser = (index) => {
+    const newProUser = proUser.filter((_, i) => i !== index);
+    const newMembers = formdata.Members.filter((_, i) => i !== index);
+    setProUser(newProUser);
+    setFormdata({ ...formdata, Members: newMembers });
   };
 
   const edittaskhandler = async (e) => {
@@ -121,11 +142,12 @@ const ProjectDetails = ({ setAlert, pop, setPop }) => {
       setFormdata({
         Title: "",
         Description: "",
-        Members: "",
+        Members: [],
         StartDate: "",
         DueDate: "",
         Github: "",
       });
+      // setProUser([]);
       toast.dismiss(toastId);
     } catch (error) {
       toast.error("Something went wrong, please try again");
@@ -179,7 +201,7 @@ const ProjectDetails = ({ setAlert, pop, setPop }) => {
   };
 
   const deleteTasks = async (id) => {
-    const resp = await deleteProjectTaskapi(id);
+    const resp = await deleteProjectTaskapi22(id);
     if (resp.status) {
       getProjectTaskapi();
       toast.success("Successfully deleted");
@@ -210,11 +232,9 @@ const ProjectDetails = ({ setAlert, pop, setPop }) => {
                 <div className="pronaheading">
                   <h2>{data?.Name}</h2>
                   <p
-                    className={`stapro ${
-                      allProject.Status === "Finished" && "finibg"
-                    } ${allProject.Status === "Ongoing" && "Ongoingbg"} ${
-                      allProject.Status === "OnHold" && "OnHoldbg"
-                    }`}
+                    className={`stapro ${allProject.Status === "Finished" && "finibg"
+                      } ${allProject.Status === "Ongoing" && "Ongoingbg"} ${allProject.Status === "OnHold" && "OnHoldbg"
+                      }`}
                   >
                     {allProject?.Status}
                   </p>
@@ -302,7 +322,33 @@ const ProjectDetails = ({ setAlert, pop, setPop }) => {
                         className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                       >
                         <td className="px-6 py-4">{task.Title}</td>
-                        <td className="px-6 py-4">{task?.Members?.fullName}</td>
+                        <td className="px-6 py-4">
+                          {task?.Members?.map((member) => (
+                           <div
+                           key={member._id}
+                           onClick={() => navigate("/adminDash/EmployeeDetails", { state: member?._id })}
+                           style={{
+                             cursor: "pointer",
+                             transition: "color 0.3s ease, text-decoration 0.3s ease",
+                           }}
+                           onMouseEnter={(e) => {
+                             e.target.style.color = "blue";
+                             e.target.style.textDecoration = "underline";
+                           }}
+                           onMouseLeave={(e) => {
+                             e.target.style.color = "black";
+                             e.target.style.textDecoration = "none";
+                           }}
+                         >
+                           <p>{member.fullName}</p>
+                         </div>
+                         
+                            
+                          ))}
+                        </td>
+
+
+
                         <td className="px-6 py-4">{task?.StartDate}</td>
                         <td className="px-6 py-4">{task?.DueDate}</td>
                         <td className="px-6 py-4">{task?.Priority}</td>
@@ -393,83 +439,97 @@ const ProjectDetails = ({ setAlert, pop, setPop }) => {
                 }
               }}
             >
-             <div style={{overflowY:"auto"}}>
-             <label>
-                <p>Subject</p>
-                <input
-                  name="Title"
-                  value={formdata.Title}
-                  onChange={changeHandler}
-                  type="text"
-                  placeholder="Name"
-                />
-              </label>
-              <label>
-                <p>Assign To </p>
-                <select
-                  name="Members"
-                  value={formdata.Members}
-                  onChange={changeHandler}
-                >
-                  <option value="Select">Select Employee</option>
-                  {allEmp?.map((emp, index) => (
-                    <option value={emp?._id} key={index}>
-                      {emp?.fullName}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label>
-                <p>Priority </p>
-                <select
-                  name="Priority"
-                  value={formdata.Priority}
-                  onChange={changeHandler}
-                >
-                  <option value="Select">Select Priority</option>
-                  <option value="Normal">Normal</option>
-                  <option value="Medium">Medium</option>
-                  <option value="High">High</option>
-                </select>
-              </label>
-              <label>
-                <p>Start Date </p>
-                <input
-                  name="StartDate"
-                  value={formdata.StartDate}
-                  onChange={changeHandler}
-                  type="date"
-                />
-              </label>
-              <label>
-                <p>Due Date</p>
-                <input
-                  name="DueDate"
-                  value={formdata.DueDate}
-                  onChange={changeHandler}
-                  type="date"
-                />
-              </label>
-              <label>
-                <p>Github Link</p>
-                <input
-                  name="Github"
-                  value={formdata.Github}
-                  onChange={changeHandler}
-                  type="text"
-                />
-              </label>
-              <label>
-                <p>Description</p>
-                <textarea
-                  type="text"
-                  name="Description"
-                  value={formdata.Description}
-                  onChange={changeHandler}
-                  placeholder="Description"
-                />
-              </label>
-             </div>
+              <div style={{ overflowY: "auto" }}>
+                <label>
+                  <p>Subject</p>
+                  <input
+                    name="Title"
+                    value={formdata.Title}
+                    onChange={changeHandler}
+                    type="text"
+                    placeholder="Name"
+                  />
+                </label>
+                <label>
+                  <p>Assign To </p>
+                  <div className="allempid">
+                    {proUser.map((pro, index) => (
+                      <div key={index} className="sinproid">
+                        <p >{pro}</p>
+                        <img
+                          src={cut}
+                          alt="Remove"
+                          onClick={() => removeUser(index)}
+                        />
+                      </div>
+                    ))}
+                  </div>
+
+                  <select
+                    name="Members"
+                    value={formdata.Members}
+                    onChange={changeHandler2}
+                  >
+                    console.log("all employee list ",allEmp)
+                    <option value="Select">Select Employee</option>
+                    {allEmp?.map((emp, index) => (
+                      <option value={emp?._id} key={index}>
+                        {emp?.fullName}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  <p>Priority </p>
+                  <select
+                    name="Priority"
+                    value={formdata.Priority}
+                    onChange={changeHandler}
+                  >
+                    <option value="Select">Select Priority</option>
+                    <option value="Normal">Normal</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                  </select>
+                </label>
+                <label>
+                  <p>Start Date </p>
+                  <input
+                    name="StartDate"
+                    value={formdata.StartDate}
+                    onChange={changeHandler}
+                    type="date"
+                  />
+                </label>
+                <label>
+                  <p>Due Date</p>
+                  <input
+                    name="DueDate"
+                    value={formdata.DueDate}
+                    onChange={changeHandler}
+                    type="date"
+                  />
+                </label>
+                <label>
+                  <p>Github Link</p>
+                  <input
+                    name="Github"
+                    value={formdata.Github}
+                    onChange={changeHandler}
+                    type="text"
+                  />
+                </label>
+                <label>
+                  <p>Description</p>
+                  <textarea
+                    type="text"
+                    name="Description"
+                    value={formdata.Description}
+                    onChange={changeHandler}
+                    placeholder="Description"
+                  />
+                </label>
+              </div>
               <div className="btnsss">
                 <button type="submit" className="saveclient">
                   <span>{isEdit ? "Update" : "Add Task "}</span>

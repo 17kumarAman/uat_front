@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import kushel from "../images/kushel.png";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate,useLocation } from "react-router-dom";
 import { useMain } from "../../hooks/useMain";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa6";
@@ -10,8 +10,17 @@ import frame from "../images/Frame.png"
 
 const Auth = (props) => {
   const { login, setUser } = useMain();
-  
+  const location = useLocation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log("Current Path:", location.pathname);
+    const user = localStorage.getItem("hrms_user");
+    if (user && location.pathname === `/login`) {
+      navigate('/');
+    }
+  }, [location, navigate]);
+
   
   var [value, setValue] = useState({
     email: "",
@@ -104,7 +113,7 @@ const Auth = (props) => {
  <p className="access">to access HRMS Dashboard</p>
                 </div>
  
- <div className="login-buttons flex">
+ <div className="login-buttons flex justify-between">
    <button id="btn1" onClick={adminLogin} className="admin_login">Admin</button>
    <button  id="btn2" onClick={userLogin} className="user_login">Employee</button>
  </div>
