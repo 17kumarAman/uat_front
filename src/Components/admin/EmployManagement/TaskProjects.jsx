@@ -162,7 +162,7 @@ const TaskProjects = ({ setAlert, pop, setPop }) => {
     const ans = await allEmployee();
    // Filter active employees
     const activeEmployees = ans?.emp?.filter(emp => emp.isDeactivated === "No");
-  console.log("activeEmployee",activeEmployees)
+  // console.log("activeEmployee",activeEmployees)
     setAllEmp(activeEmployees);
   };
   
@@ -209,7 +209,7 @@ const TaskProjects = ({ setAlert, pop, setPop }) => {
       setAllProjects(fitlerdata);
     }
   }, [optIndex]);
-  console.log("all employee list ",allEmp)
+  // console.log("all employee list ",allEmp)x
   return (
     <>
       <div className="employee-dash h-full">
@@ -267,122 +267,80 @@ const TaskProjects = ({ setAlert, pop, setPop }) => {
               </div>
 
               <div className="allClients">
-                {allProjects.map((client, index) => (
-                  <div key={index} className="singleProject">
-                    
-                    <div
-                     
-                      className="projnav"
-                    >
-                      <div  onClick={()=>navigate("/adminDash/HRM/projectDetails" , {state: client})} className="leftnav cursor-pointer">
-                        <Avatar
-                        
-                          name={client?.Name}
-                          colour={
-                            index % 3 == 0
-                              ? "#3C78E9"
-                              : `${index % 2 == 0 ? "#E45D3A" : "#F7A539"}`
-                          }
-                          size={32}
-                          className="avatarclient"
-                        />
-                        <p>{client.Name}</p>
-                      </div>
 
-                      <img  className="cursor-pointer" onClick={() => {
-                        if (showIndex === index) {
-                          setShowIndex(null);
-                        } else {
-                          setShowIndex(index);
-                        }
-                      }} src={threedots} alt="" />
+              <table>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Project Name</th>
+                    <th>Start Date</th>
+                    <th>Deadline</th>
+                    <th>Members</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
 
-                    </div>
+                <tbody>
+                  {allProjects.map((client, index) => (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>
+                <span>{client.Name}</span>
+                <div style={{ display: "flex", gap: "10px", marginTop: "2px", fontSize: "0.875rem", color: "#2563eb" }}>
+                  <p onClick={()=>navigate("/adminDash/HRM/projectOverview" , {state:client})} style={{ margin: 0, cursor: "pointer" }} >
+                    View
+                  </p>
+                  <span>|</span>
+                  <p onClick={() => { handleEditClick(client) }} style={{ margin: 0, cursor: "pointer" }} >
+                    Edit
+                  </p>
+                  <span>|</span>
+                  <p onClick={() => deleteApi(client?._id)} style={{ margin: 0, cursor: "pointer" }} >
+                    Delete
+                  </p>
+                </div>
+              </td>
+              <td>{new Date(client?.createdAt).toISOString().split('T')[0]}</td>
+              <td>{client?.DueDate}</td>
 
-                    <hr />
+                      {/* <td>{client?.DueDate}</td> */}
+                      <td style={{ display: "flex" , gap:"-2px" }}>
+                        {client?.Members?.map((member) => (
+                            <img
+                              src="https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png"
+                              className="w-20 h-20"
+                              alt="Member Avatar"
+                              key={member._id}
+                            onClick={() => navigate("/adminDash/EmployeeDetails", { state: member?._id })}
+                            style={{
+                              cursor: "pointer",
+                              transition: "color 0.3s ease, text-decoration 0.3s ease", height: "40px", width: "40px"
+                            }}
+                            />
+                        ))}
+                      </td>
+                      <td>
+                        <span style={{
+                          color: "#2563eb",
+                          border: "1px solid #a8c1f7",
+                          background: "#f6f9fe",
+                          alignItems: "center",
+                          borderRadius: ".375rem",
+                          display: "inline-flex",
+                          fontSize: ".75rem",
+                          fontWeight: 500,
+                          lineHeight: "1rem",
+                          padding: ".25rem .5rem",
+                        }}>{client.Status}</span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
 
-                    <div className="statusdue">
-                      <div
-                        className={`stapro ${
-                          client.Status === "Finished" && "finibg"
-                        } ${client.Status === "Ongoing" && "Ongoingbg"} ${
-                          client.Status === "OnHold" && "OnHoldbg"
-                        }`}
-                      >
-                        <span className={`${client?.Status === "onHold" || "onHoldbg"}`}>{client.Status}</span>
-                      </div>
 
-                      <p className="duedate">
-                        {" "}
-                        <span>Due Date:</span>
-                        {client?.DueDate}
-                      </p>
-                    </div>
 
-                    <div className="propara">
-                      <p className="">{client?.Description}</p>
-                    </div>
-
-                    <div className="mem">
-                      <p>Members</p>
-                       <p>{client?.Members?.length}</p>
-                    </div>
-
-                    <div className="protasjwon">
-                      <p className="proteast">{client.task} Tasks</p>
-                    </div>
-
- <div className="mem">
-                     <p onClick={()=>navigate("/adminDash/HRM/projectOverview" , {state:client})} className="oveviewBtn">Overview </p>
- </div>
-
-                    {showIndex === index && (
-                      <div className="showIndexcont2">
-                        {/* <div className="singlinpro">
-                          <img src={invidd} alt="" />
-                          <span>Invite Employee</span>
-                        </div>
-
-                        <hr /> */}
-
-                        <div
-                          onClick={() => {
-                        
-                            handleEditClick(client);
-                          }}
-                          className="singlinpro"
-                        >
-                          <img src={edit} alt="" />
-                          <span>Edit</span>
-                        </div>
-
-                        <hr />
-
-                        {/* <div className="singlinpro">
-                          <img src={share} alt="" />
-                          <span>Share to Clients</span>
-                        </div>
-
-                        <hr /> */}
-
-                        {/* <div className="singlinpro">
-                          <img src={bxcopy} alt="" />
-                          <span>Duplicate</span>
-                        </div>
-
-                        <hr /> */}
-
-                        <div
-                          onClick={() => deleteApi(client?._id)}
-                          className="singlinpro"
-                        >
-                          <img src={disable} alt="" />
-                          <span className="delspan">Delete</span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
+               
               </div>
             </div>
           </div>

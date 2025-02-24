@@ -11,7 +11,7 @@ import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import CircularProgress from "./CircularProgress";
 import ProgressBar from "@ramonak/react-progress-bar";
-
+import ProjectOverview2 from "../../admin/EmployManagement/ProjectOverview2"
 
 
 const ProjectOverview = ({ setAlert, pop, setPop }) => {
@@ -41,6 +41,8 @@ const ProjectOverview = ({ setAlert, pop, setPop }) => {
   }, []);
 
 
+  const projectOpt = ["Overview", "Task"];
+  const [optIndex, setOptIndex] = useState(0);
   const [openTask ,setOpenTask] =useState(0);
   const [OpenTaskper ,setOpenTaskper] =useState(0);
 
@@ -116,7 +118,39 @@ const ProjectOverview = ({ setAlert, pop, setPop }) => {
           )}
 
           <div className="em">
-            <div className="tclwrap2">
+          <div className="" style={ {
+    width: "338px",
+    height: "42px",
+    display: "flex",
+    alignItems: "center",
+
+}}>
+                {projectOpt.map((pr, index) => (
+                  <div
+                    onClick={() => setOptIndex(index)}
+                    key={index}
+                    className={`cursor-pointer singelPr ${
+                      index === 0 && "addlefborder"
+                    }  ${index === 1 && "addBorder"} ${
+                      optIndex === index && "adddbg"
+                    }`}
+                  >
+                    <span>{pr}</span>
+                  </div>
+                ))}
+              </div>
+
+{
+  optIndex===1?(
+    <>
+  <div style={{ marginTop: "-1px" , paddingTop:"-20px" }}>
+    <ProjectOverview2 />
+  </div>
+</>
+
+    
+  ):(
+    <div className="tclwrap2" style={{marginTop:"40px"}}>
 
 
             <div className="projectOverView">
@@ -199,6 +233,10 @@ const ProjectOverview = ({ setAlert, pop, setPop }) => {
               </div>
 
             </div>
+  )
+}
+
+            
           </div>
         </div>
       </div>

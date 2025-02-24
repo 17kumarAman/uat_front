@@ -20,7 +20,7 @@ import { MdOutlineEdit } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-const ProjectDetails = ({ setAlert, pop, setPop }) => {
+const ProjectOverview2 = ({ setAlert, pop, setPop }) => {
   const navigate = useNavigate();
   const {
     user,
@@ -227,19 +227,10 @@ const ProjectDetails = ({ setAlert, pop, setPop }) => {
 
   return (
     <>
-      <div className="employee-dash h-full">
-        {role === "EMPLOYEE" ? (
-          <EmployeeSidebar pop={pop} setPop={setPop} />
-        ) : (
-          <AdminSidebar pop={pop} setPop={setPop} />
-        )}
-        <div className="tm">
-          {role === "EMPLOYEE" ? (
-            <EmployeeNavbar user={user} setAlert={setAlert} />
-          ) : (
-            <AdminNavbar user={user} setAlert={setAlert} />
-          )}
-          <div className="em">
+      <div className="">
+          <div className="tm">
+          
+          <div style={{marginTop:'40px', paddingLeft:"20px"}}>
             <div className="tclwrap">
               <nav>
                 <div className="pronaheading">
@@ -253,12 +244,7 @@ const ProjectDetails = ({ setAlert, pop, setPop }) => {
                   </p>
                 </div>
                 <div className="clibtns">
-                  <NavLink to="/adminDash/HRM/taskProjects">
-                    <button className="backpro">
-                      <span>Back</span>
-                    </button>
-                  </NavLink>
-                  <button
+                <button
                     onClick={() => {
                       setAddClientPop(true);
                       setisEdit(false);
@@ -329,38 +315,30 @@ const ProjectDetails = ({ setAlert, pop, setPop }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentTasks.map((task, index) => (<>
+                    {currentTasks.map((task, index) => (
+                        //  <div key={index}>  
+
                       <tr
                         key={index}
                         className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                       >
-                        
-
                         <td className="px-6 py-4">{task.Title}</td>
-                        <td className="px-6 py-4">
-                          {task?.Members?.map((member) => (
-                           <div
-                           key={member._id}
-                           onClick={() => navigate("/adminDash/EmployeeDetails", { state: member?._id })}
-                           style={{
-                             cursor: "pointer",
-                             transition: "color 0.3s ease, text-decoration 0.3s ease",
-                           }}
-                           onMouseEnter={(e) => {
-                             e.target.style.color = "blue";
-                             e.target.style.textDecoration = "underline";
-                           }}
-                           onMouseLeave={(e) => {
-                             e.target.style.color = "black";
-                             e.target.style.textDecoration = "none";
-                           }}
-                         >
-                           <p>{member.fullName}</p>
-                         </div>
-                         
-                            
-                          ))}
-                        </td>
+                        {/* <span>dei</span> */}
+                        <td style={{ display: "flex" , gap:"-2px" }}>
+                        {task?.Members?.map((member) => (
+                            <img
+                              src="https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png"
+                              className="w-20 h-20"
+                              alt="Member Avatar"
+                              key={member._id}
+                            onClick={() => navigate("/adminDash/EmployeeDetails", { state: member?._id })}
+                            style={{
+                              cursor: "pointer",
+                              transition: "color 0.3s ease, text-decoration 0.3s ease", height: "40px", width: "40px"
+                            }}
+                            />
+                        ))}
+                      </td>
 
 
 
@@ -393,11 +371,8 @@ const ProjectDetails = ({ setAlert, pop, setPop }) => {
                             className="iconsss"
                           />
                         </td>
-                        {/* </div> */}
-{/* <div>hello</div>
-{alert("kjslgj")} */}
                       </tr>
-                      </>
+                    //   </div>
                     ))}
                   </tbody>
                 </table>
@@ -625,4 +600,4 @@ const ProjectDetails = ({ setAlert, pop, setPop }) => {
   );
 };
 
-export default ProjectDetails;
+export default ProjectOverview2;
