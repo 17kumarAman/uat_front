@@ -227,9 +227,9 @@ const EmployeeAnnouncement = ({ pop, setPop, setAlert }) => {
               </div>
 
               
-              {/* <div onClick={() => setOpenForm(true)} className="plusImg6">
+              <div onClick={() => setOpenForm(true)} className="plusImg6">
                 <img src={annPlus} alt="" />  <span>ADD</span>
-              </div> */}
+              </div>
             </div>
 
             <main className="anMain">
