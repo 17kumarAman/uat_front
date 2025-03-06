@@ -4,6 +4,7 @@ import { deleteReq, get, post, put, postDocuments } from '../Api/api'
 import { useState } from 'react';
 
 // const baseUrl = "http://localhost:5000";
+// const baseUrl = "https://my-backend-blond.vercel.app"
 // 
 // const baseUrl = "https://hrms-backend-code.onrender.com"
 
@@ -15,7 +16,7 @@ import { useState } from 'react';
 
 // this is production baseurl 
 const baseUrl = "https://hmsbackend.kusheldigi.com";
-   
+
 
 // const baseUrl = "https://hrms-backend-g3wt.onrender.com";
 
@@ -2220,8 +2221,8 @@ const MainState = (props) => {
       return data;
    };
 
-   const createClientapi = async ({ Name, Email,Password, City, State, ZipCode, PhoneNumber, Country, Address }) => {
-      const data = await post(`${baseUrl}/task/createClient`, { Name, Email,Password, City, State, ZipCode, PhoneNumber, Country, Address }, true);
+   const createClientapi = async ({ Name, Email, Password, City, State, ZipCode, PhoneNumber, Country, Address }) => {
+      const data = await post(`${baseUrl}/task/createClient`, { Name, Email, Password, City, State, ZipCode, PhoneNumber, Country, Address }, true);
       return data;
    };
 
@@ -2235,9 +2236,9 @@ const MainState = (props) => {
       return data;
    }
 
-   const createProjectapi = async ({ Name, Description, Status, DueDate, Members, startDate,client }) => {
+   const createProjectapi = async ({ Name, Description, Status, DueDate, Members, startDate, client }) => {
       let projectOwner = JSON.parse(localStorage.getItem("hrms_user"));
-      const data = await post(`${baseUrl}/latest_project/createProject`, { projectOwner: client, projectName: Name, Description, Status, startDate, deadline: DueDate, Members ,client:client }, true);
+      const data = await post(`${baseUrl}/latest_project/createProject`, { projectOwner: client, projectName: Name, Description, Status, startDate, deadline: DueDate, Members, client: client }, true);
       return data;
    };
 
@@ -2245,9 +2246,9 @@ const MainState = (props) => {
       const data = await get(`${baseUrl}/latest_project/getAllProject`, true);
       return data;
    };
-   const getAllProjectUserApi = async () => {
+   const getAllProjectUserApi = async (id) => {
       let hrms_user = JSON.parse(localStorage.getItem("hrms_user"));
-      const data = await get(`${baseUrl}/latest_project/getProjectsByUserId/${hrms_user?._id}`, true);
+      const data = await get(`${baseUrl}/latest_project/getProjectsByUserId/${id}`, true);
       return data;
    };
 

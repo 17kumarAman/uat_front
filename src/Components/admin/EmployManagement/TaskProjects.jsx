@@ -61,9 +61,9 @@ const TaskProjects = ({ setAlert, pop, setPop }) => {
       toast.error("sometinng went wrong ,please try agin");
     }
   };
-  useEffect(()=>{
+  useEffect(() => {
     // console.log(clientInfo)
-  },[clientInfo])
+  }, [clientInfo])
 
   const changeHandler = (e) => {
     const { name, value } = e.target;
@@ -76,19 +76,19 @@ const TaskProjects = ({ setAlert, pop, setPop }) => {
   const changeHandler2 = (e) => {
     const selectedEmpId = e.target.value;
     if (selectedEmpId === "Select" || formdata.Members.includes(selectedEmpId))
-        return;
+      return;
 
     const selectedEmp = allEmp.find((emp) => emp._id === selectedEmpId);
     setProUser([...proUser, selectedEmp.fullName]);
     setFormdata({ ...formdata, Members: [...formdata.Members, selectedEmpId] });
-};
+  };
 
-const removeUser = (index) => {
+  const removeUser = (index) => {
     const newProUser = proUser.filter((_, i) => i !== index);
     const newMembers = formdata.Members.filter((_, i) => i !== index);
     setProUser(newProUser);
     setFormdata({ ...formdata, Members: newMembers });
-};
+  };
 
   const [showIndex, setShowIndex] = useState(null);
 
@@ -149,8 +149,8 @@ const removeUser = (index) => {
     const toastId = toast.loading("Loading...");
     try {
       const ans = await createProjectapi({
-        ...formdata, projectOwner: clientInfo,
-        client: clientInfo
+        ...formdata, projectOwner: clientInfo || hrms_user._id,
+        client: clientInfo || hrms_user._id
       });
       if (ans?.status) {
         toast.success("Successfuly created");
@@ -359,7 +359,7 @@ const removeUser = (index) => {
                                 ? member?.profileImage
                                 : "https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png"
                                 }`}
-                              className="w-20 h-20"
+                              className="w-20 h-20 rounded-full cursor-pointer transition-colors duration-300 ease-in-out"
                               alt="Member Avatar "
                               key={member._id}
                               onClick={() =>
@@ -367,14 +367,7 @@ const removeUser = (index) => {
                                   state: member?._id,
                                 })
                               }
-                              style={{
-                                borderRadius: "50%",
-                                cursor: "pointer",
-                                transition:
-                                  "color 0.3s ease, text-decoration 0.3s ease",
-                                height: "40px",
-                                width: "40px",
-                              }}
+                             
                             />
                           ))}
                         </td>
@@ -482,6 +475,7 @@ const removeUser = (index) => {
                     value={clientInfo}
                     onChange={(e) => setClientInfo(e.target.value)}  // Update state with the selected client
                   >
+                    <option value={hrms_user._id}>Select</option>
                     {allClient.map((e, index) => (
                       <option value={e._id} key={index}>
                         {e.Name}

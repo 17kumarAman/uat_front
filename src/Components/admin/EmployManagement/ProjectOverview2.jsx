@@ -281,7 +281,7 @@ const ProjectOverview2 = ({ allTasks, getProjectTaskapi }) => {
                   </label>
                   <label>
                     <p className="filn">Due Date:</p>
-                    <p className="proand">{data?.DueDate}</p>
+                    <p className="proand">{data?.deadline}</p>
                   </label>
                   <label>
                     <p className="filn">Total Members</p>
